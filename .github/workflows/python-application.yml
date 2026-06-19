@@ -51,3 +51,12 @@ jobs:
         script: |
           echo "Conexión SSH exitosa"
           touch ejemplo.txt
+    - name: Pasar archivos desde git al servidor
+      uses: appleboy/scp-action@v1
+      with:
+        host: ${{ secrets.VPS_HOST }}
+        username: ${{ secrets.VPS_USER }}
+        port: ${{ secrets.VPS_SSH_PORT }}
+        password: ${{ secrets.VPS_PASSWORD }}
+        source: "/stack.yml,Makefile"
+        target: "/home/${{ secrets.VPS_USER }}/landingb"
