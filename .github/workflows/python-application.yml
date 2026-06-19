@@ -72,4 +72,5 @@ jobs:
           echo "Desplegando servicios"
           cd ~/landingb
           docker pull ghcr.io/gma-galvez/proyecto:3.0.0
-          docker stack deploy -c stack.yml borrar
+          docker stack deploy -c stack.yml tarea3.0
+          docker service update --force tarea3.0_geremy
