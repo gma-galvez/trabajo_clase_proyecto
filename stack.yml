@@ -1,1 +1,31 @@
 version: '3.9'
+
+services:
+  geremy:
+    image: ghcr.io/gma-galvez/proyecto:3.0.0
+    networks:
+      - traefik-public
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+      labels:
+         - "traefik.enable=true"
+         - "traefik.http.routers.geremy.entrypoints=http"
+         - "traefik.http.routers.geremy.rule=Host(geremy.byronrm.com)"
+         - "traefik.http.middlewares.geremy-https-redirect.redirectscheme.scheme=https"
+         - "traefik.http.routers.geremy.middlewares=geremy-https-redirect"
+         - "traefik.http.routers.geremy-secure.entrypoints=https"
+         - "traefik.http.routers.geremy-secure.rule=Host(geremy.byronrm.com)"
+         - "traefik.http.routers.geremy-secure.tls=true"
+         - "traefik.http.routers.geremy-secure.tls.certresolver=http"
+         - "traefik.http.routers.geremy-secure.service=geremy"
+         - "traefik.http.services.geremy.loadbalancer.server.port=5000"
+         - "traefik.docker.network=traefik-public"
+         
+networks:
+  traefik-public:
+    external: true
