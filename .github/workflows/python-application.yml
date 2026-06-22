@@ -1,4 +1,4 @@
-name: tarea3.0
+name: tarea3
 
 on:
   push:
@@ -69,8 +69,8 @@ jobs:
         port: ${{ secrets.VPS_SSH_PORT }}
         password: ${{ secrets.VPS_PASSWORD }}
         script: |
-          echo "Desplegando servicios"
-          cd ~/landingb
-          docker pull ghcr.io/gma-galvez/proyecto:3.0.0
-          docker stack deploy -c stack.yml tarea3.0
-          docker service update --force tarea3.0_geremy
+         echo "Desplegando servicios"
+         cd ~/landingb
+         docker pull ghcr.io/gma-galvez/proyecto:3.0.0
+         docker stack deploy -c stack.yml tarea3
+         docker service update --force tarea3_geremy
