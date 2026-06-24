@@ -15,11 +15,11 @@ services:
       labels:
          - "traefik.enable=true"
          - "traefik.http.routers.geremy.entrypoints=http"
-         - "traefik.http.routers.geremy.rule=Host(geremy.byronrm.com)"
+         - "traefik.http.routers.geremy.rule=Host(`geremy.byronrm.com`)"
          - "traefik.http.middlewares.geremy-https-redirect.redirectscheme.scheme=https"
          - "traefik.http.routers.geremy.middlewares=geremy-https-redirect"
          - "traefik.http.routers.geremy-secure.entrypoints=https"
-         - "traefik.http.routers.geremy-secure.rule=Host(geremy.byronrm.com)"
+         - "traefik.http.routers.geremy-secure.rule=Host(`geremy.byronrm.com`)"
          - "traefik.http.routers.geremy-secure.tls=true"
          - "traefik.http.routers.geremy-secure.tls.certresolver=http"
          - "traefik.http.routers.geremy-secure.service=geremy"
