@@ -51,6 +51,7 @@ jobs:
         script: |
           echo "Conexión SSH exitosa"
           touch ejemplo.txt
+          
     - name: Pasar archivos desde git al servidor
       uses: appleboy/scp-action@v1
       with:
