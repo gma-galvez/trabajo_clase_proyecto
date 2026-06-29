@@ -2,109 +2,198 @@ from flask import Flask, render_template_string, request
 
 app = Flask(__name__)
 
-# Lógica pura de Python (Esto es lo que probará pytest para tu nota)
-def celsius_a_fahrenheit(celsius: float) -> float:
-    return (celsius * 9/5) + 32
+# Función que convierte dólares a euros con una tasa fija
+def dolares_a_euros(dolares: float) -> float:
+    return round(dolares * 0.85, 2)
 
-# Guardamos el HTML, CSS y la lógica responsiva en el string
 HTML_TEMPLATE = """
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Conversor de Unidades - Tarea 3.0</title>
+    <title>Global Exchange</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <style>
-        body {
-            background: linear-gradient(135deg, #ff9966 0%, #ff5e62 100%);
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
+
+        body{
+            background: linear-gradient(135deg,#0f172a,#1e3a8a);
+            min-height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            font-family:'Segoe UI',sans-serif;
         }
-        .card-custom {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
-            padding: 3rem;
-            text-align: center;
-            max-width: 480px;
-            width: 90%;
+
+        .card{
+            width:520px;
+            max-width:95%;
+            border:none;
+            border-radius:20px;
+            box-shadow:0 20px 45px rgba(0,0,0,.35);
+            padding:40px;
         }
-        .btn-custom {
-            background-color: #ff5e62;
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 50px;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            width: 100%;
+
+        .logo{
+            font-size:60px;
         }
-        .btn-custom:hover {
-            background-color: #ff9966;
-            color: white;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(255, 94, 98, 0.4);
+
+        h1{
+            color:#1E40AF;
+            font-weight:bold;
         }
-        .icon {
-            font-size: 4rem;
-            margin-bottom: 1rem;
+
+        .btn-custom{
+            background:#2563EB;
+            color:white;
+            width:100%;
+            border-radius:10px;
+            padding:12px;
+            font-size:18px;
+            font-weight:bold;
         }
-        .result-box {
-            background-color: #fff3cd;
-            border-left: 5px solid #ffc107;
-            border-radius: 10px;
-            padding: 15px;
+
+        .btn-custom:hover{
+            background:#1D4ED8;
+            color:white;
         }
+
+        .resultado{
+            margin-top:25px;
+            background:#dcfce7;
+            border-left:6px solid #16a34a;
+            padding:20px;
+            border-radius:10px;
+        }
+
+        footer{
+            margin-top:20px;
+            font-size:13px;
+            color:gray;
+        }
+
     </style>
+
 </head>
+
 <body>
 
-    <div class="card-custom">
-        <div class="icon">🌡️</div>
-        <h1 class="mb-3">Conversor Termométrico</h1>
-        <p class="text-muted mb-4">
-            Ingresa los grados en Celsius (°C) para calcular de forma inmediata su equivalente en Fahrenheit (°F).
-        </p>
-        
-        <form method="POST" action="/">
-            <div class="mb-4">
-                <input type="number" step="any" name="celsius" class="form-control text-center form-control-lg" placeholder="Ej: 25" required value="{{ celsius_enviado }}">
-            </div>
-            <button type="submit" class="btn btn-custom mb-4">Convertir ahora 🚀</button>
-        </form>
+<div class="card">
 
-        {% if resultado is not none %}
-            <div class="result-box mt-2 text-start">
-                <span class="fw-bold text-warning-depth d-block mb-1">¡Conversión Exitosa!</span>
-                <span class="fs-5 text-dark">{{ celsius_enviado }}°C equivalen a <strong>{{ resultado }}°F</strong></span>
-            </div>
-        {% endif %}
-    </div>
+<div class="text-center">
+
+<div class="logo">💱</div>
+
+<h1>Global Exchange</h1>
+
+<p class="text-muted">
+Conversor profesional de dólares estadounidenses a euros.
+</p>
+
+</div>
+
+<form method="POST">
+
+<div class="mb-3">
+
+<label class="form-label fw-bold">
+Monto en dólares (USD)
+</label>
+
+<input
+type="number"
+step="any"
+name="dolares"
+class="form-control form-control-lg"
+placeholder="Ejemplo: 150"
+required
+value="{{ dolares }}">
+
+</div>
+
+<button class="btn btn-custom">
+
+Convertir Divisa
+
+</button>
+
+</form>
+
+{% if resultado is not none %}
+
+<div class="resultado">
+
+<h5 class="text-success">
+
+✔ Conversión realizada correctamente
+
+</h5>
+
+<hr>
+
+<p>
+
+<strong>Monto ingresado:</strong>
+
+{{ dolares }} USD
+
+</p>
+
+<p>
+
+<strong>Tasa aplicada:</strong>
+
+1 USD = 0.85 EUR
+
+</p>
+
+<h4 class="text-primary">
+
+{{ resultado }} EUR
+
+</h4>
+
+</div>
+
+{% endif %}
+
+<footer class="text-center">
+
+© 2026 Global Exchange
+
+</footer>
+
+</div>
 
 </body>
 </html>
 """
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route("/", methods=["GET","POST"])
 def home():
-    resultado = None
-    celsius_enviado = ""
-    
-    if request.method == 'POST':
-        try:
-            celsius_enviado = request.form.get('celsius', '')
-            # Conversión usando nuestra función matemática
-            resultado = celsius_a_fahrenheit(float(celsius_enviado))
-        except ValueError:
-            resultado = "Valor inválido"
-            
-    return render_template_string(HTML_TEMPLATE, resultado=resultado, celsius_enviado=celsius_enviado)
 
-# Corrección crítica: '__main__' con 'i' para que corra en entornos locales y Docker
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True, port=5000)
+    resultado=None
+    dolares=""
+
+    if request.method=="POST":
+
+        try:
+
+            dolares=request.form.get("dolares","")
+
+            resultado=dolares_a_euros(float(dolares))
+
+        except ValueError:
+
+            resultado="Valor inválido"
+
+    return render_template_string(
+        HTML_TEMPLATE,
+        resultado=resultado,
+        dolares=dolares
+    )
+
+if __name__=="__main__":
+    app.run(host="0.0.0.0",port=5000,debug=True)
